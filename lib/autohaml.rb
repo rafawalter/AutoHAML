@@ -1,31 +1,36 @@
 require 'find'
 
 class AutoHaml
-  def initialize(caminho_base = '.')
+  IDLE_SECONDS = 3
+  
+  def initialize(pasta_base = '.', pasta_destino = '.')
     @processamentos = {
       :haml => :montar_comando_haml,
       :sass => :montar_comando_sass,
       :scss => :montar_comando_sass
     }
     @extensoes = @processamentos.keys.collect {|key| '.'+key.to_s}
-    @caminho_base = caminho_base
+    @pasta_base = pasta_base
+    @pasta_destino = pasta_destino    
     @ultima_pesquisa ||= Time.now
   end
 
   def monitorar
     while (true) do
-      verificar_arquivos @caminho_base
-      sleep(3)
+      sleep(IDLE_SECONDS)
+      verificar_arquivos
     end    
   end
   
-  def verificar_arquivos(caminho_base)
+  def verificar_arquivos
     arquivos_processados = 0
     total_de_arquivos = 0
-    Find.find(caminho_base) do |path|
+    Find.find(@pasta_base) do |path|
+      log path
       if @extensoes.include?(File.extname(path))
         ultima_alteracao = File.mtime path
-        if ultima_alteracao > @ultima_pesquisa
+        log "#{ultima_alteracao} - #{@ultima_pesquisa} = #{ultima_alteracao.to_f - @ultima_pesquisa.to_f}"
+        if (ultima_alteracao.to_f - @ultima_pesquisa.to_f) >= -IDLE_SECONDS
           comando = montar_comando path
           executar comando
           arquivos_processados += 1
@@ -37,7 +42,7 @@ class AutoHaml
   end
   
   def executar(comando)
-    log "Executando: #{comando}"
+    log "** Executando: #{comando}"
     `#{comando}`
   end
   
@@ -49,19 +54,21 @@ class AutoHaml
   end
   
   def montar_comando_haml(path)
-    arquivo_html = path.gsub('.haml', '.html')
+    arquivo_html = path.gsub(@pasta_base, @pasta_destino).gsub('.haml', '.html')
     "haml #{path} #{arquivo_html}"
   end
   
   def montar_comando_sass(path)
-    arquivo_html = path.gsub(/\.s[ac]ss/, '.css')
+    arquivo_html = path.gsub(@pasta_base, @pasta_destino).gsub(/\.s[ac]ss/, '.css')
     "sass #{path} #{arquivo_html}"
   end
   
   def log(texto)
-    puts texto
+    #puts texto
   end
 end
 
-AutoHaml.new.monitorar
+if $0 == __FILE__
+  AutoHaml.new.monitorar
+end
 
