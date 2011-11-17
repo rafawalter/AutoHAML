@@ -48,7 +48,7 @@ class AutoHaml
   end
   
   def executar(comando)
-    log "** Executando: #{comando}"
+    log "#{Time.now} Executando: #{comando}"
     `#{comando}`
   end
   
