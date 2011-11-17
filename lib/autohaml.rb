@@ -1,9 +1,10 @@
 require 'find'
 
 class AutoHaml
-  IDLE_SECONDS = 3
+  IDLE_SECONDS = 2
+  SLEEP_SECONDS = 3
   
-  def initialize(pasta_base = '.', pasta_destino = '.')
+  def initialize(pasta_base = '.', pasta_destino = '.', log = true, debug = false)
     @processamentos = {
       :haml => :montar_comando_haml,
       :sass => :montar_comando_sass,
@@ -12,12 +13,17 @@ class AutoHaml
     @extensoes = @processamentos.keys.collect {|key| '.'+key.to_s}
     @pasta_base = pasta_base
     @pasta_destino = pasta_destino    
-    @ultima_pesquisa ||= Time.now
+    @ultima_pesquisa ||= Time.now	
+	@log ||= log
+	@debug ||= debug
+	
+	log "Monitorando a pasta #{@pasta_base}"
+	log "Gerando na pasta #{@pasta_destino}"
   end
 
   def monitorar
     while (true) do
-      sleep(IDLE_SECONDS)
+      sleep(SLEEP_SECONDS)
       verificar_arquivos
     end    
   end
@@ -26,10 +32,10 @@ class AutoHaml
     arquivos_processados = 0
     total_de_arquivos = 0
     Find.find(@pasta_base) do |path|
-      log path
+      debug path
       if @extensoes.include?(File.extname(path))
         ultima_alteracao = File.mtime path
-        log "#{ultima_alteracao} - #{@ultima_pesquisa} = #{ultima_alteracao.to_f - @ultima_pesquisa.to_f}"
+        debug "#{ultima_alteracao} - #{@ultima_pesquisa} = #{ultima_alteracao.to_f - @ultima_pesquisa.to_f}"
         if (ultima_alteracao.to_f - @ultima_pesquisa.to_f) >= -IDLE_SECONDS
           comando = montar_comando path
           executar comando
@@ -64,7 +70,11 @@ class AutoHaml
   end
   
   def log(texto)
-    #puts texto
+    puts texto if @log || @debug
+  end
+  
+  def debug(texto)
+    puts texto if @debug
   end
 end
 

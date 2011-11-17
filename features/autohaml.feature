@@ -15,6 +15,7 @@ Funcionalidade: Conversão automática de HAML e SASS
     Então vai ser gerado o arquivo css correspondente
 
   Cenário: Processar arquivo SCSS
-		Dado que alterei um arquivo scss
-	  Quando autohaml verificar os arquivos
+	Dado que alterei um arquivo scss
+	Quando autohaml verificar os arquivos
     Então vai ser gerado o arquivo css correspondente
+	
