@@ -2,7 +2,7 @@ require 'find'
 
 class AutoHaml
   IDLE_SECONDS = 2
-  SLEEP_SECONDS = 3
+  SLEEP_SECONDS = 1
   
   def initialize(pasta_base = '.', pasta_destino = '.', log = true, debug = false)
     @processamentos = {
@@ -22,9 +22,15 @@ class AutoHaml
   end
 
   def monitorar
+	idle_feedback, idle_feedback_unused = '.', '-'
     while (true) do
       sleep(SLEEP_SECONDS)
-      verificar_arquivos
+      arquivos_processados = verificar_arquivos
+	  if arquivos_processados != 0
+		print "\n" 			
+		idle_feedback, idle_feedback_unused = idle_feedback_unused, idle_feedback
+	  end
+	  print idle_feedback
     end    
   end
   
@@ -39,12 +45,13 @@ class AutoHaml
         if (ultima_alteracao.to_f - @ultima_pesquisa.to_f) >= -IDLE_SECONDS
           comando = montar_comando path
           executar comando
-          arquivos_processados += 1
+          arquivos_processados += 1		  
         end
       end
       total_de_arquivos += 1
     end
     @ultima_pesquisa = Time.now
+	arquivos_processados
   end
   
   def executar(comando)
