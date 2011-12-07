@@ -1,7 +1,7 @@
 require 'find'
 
 class AutoHaml
-  IDLE_SECONDS = 2
+  IDLE_SECONDS = 1
   SLEEP_SECONDS = 1
   
   def initialize(pasta_base = '.', pasta_destino = '.', log = true, debug = false)
@@ -37,7 +37,7 @@ class AutoHaml
   def verificar_arquivos
     arquivos_processados = 0
     total_de_arquivos = 0
-    Find.find(@pasta_base) do |path|
+    Dir.glob(File.join(@pasta_base,'**','*')) do |path|
       debug path
       if @extensoes.include?(File.extname(path))
         ultima_alteracao = File.mtime path
