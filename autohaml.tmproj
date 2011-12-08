@@ -3,163 +3,72 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
-	<string>autohaml.rb</string>
+	<string>lib/autohaml.rb</string>
 	<key>documents</key>
 	<array>
 		<dict>
-			<key>children</key>
-			<array>
-				<dict>
-					<key>filename</key>
-					<string>autohaml.rb</string>
-					<key>lastUsed</key>
-					<date>2011-11-15T12:26:21Z</date>
-					<key>selected</key>
-					<true/>
-				</dict>
-				<dict>
-					<key>children</key>
-					<array>
-						<dict>
-							<key>filename</key>
-							<string>hello.haml</string>
-							<key>lastUsed</key>
-							<date>2011-11-15T11:55:29Z</date>
-						</dict>
-						<dict>
-							<key>filename</key>
-							<string>hello.scss</string>
-							<key>lastUsed</key>
-							<date>2011-11-15T12:13:10Z</date>
-						</dict>
-						<dict>
-							<key>filename</key>
-							<string>hello.sass</string>
-							<key>lastUsed</key>
-							<date>2011-11-15T12:26:19Z</date>
-						</dict>
-						<dict>
-							<key>filename</key>
-							<string>hello.html</string>
-							<key>lastUsed</key>
-							<date>2011-11-15T11:55:23Z</date>
-						</dict>
-						<dict>
-							<key>filename</key>
-							<string>hello.css</string>
-							<key>lastUsed</key>
-							<date>2011-11-15T12:26:21Z</date>
-						</dict>
-					</array>
-					<key>expanded</key>
-					<true/>
-					<key>name</key>
-					<string>test_files</string>
-				</dict>
-			</array>
 			<key>expanded</key>
 			<true/>
 			<key>name</key>
 			<string>AutoHAML</string>
+			<key>regexFolderFilter</key>
+			<string>!.*/(\.[^/]*|CVS|_darcs|_MTN|\{arch\}|blib|.*~\.nib|.*\.(framework|app|pbproj|pbxproj|xcode(proj)?|bundle))$</string>
+			<key>sourceDirectory</key>
+			<string></string>
 		</dict>
 	</array>
 	<key>fileHierarchyDrawerWidth</key>
 	<integer>200</integer>
 	<key>metaData</key>
 	<dict>
-		<key>autohaml.rb</key>
+		<key>features/autohaml.feature</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>19</integer>
+				<integer>20</integer>
 				<key>line</key>
-				<integer>39</integer>
+				<integer>7</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+		</dict>
+		<key>features/step_definitions/autohaml_steps.rb</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>51</integer>
+				<key>line</key>
+				<integer>45</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>18</integer>
 		</dict>
-		<key>hello.css</key>
+		<key>lib/autohaml.rb</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>0</integer>
+				<integer>6</integer>
 				<key>line</key>
-				<integer>0</integer>
+				<integer>28</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
-		<key>hello.haml</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>11</integer>
-				<key>line</key>
-				<integer>1</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
-		<key>hello.html</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>0</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
-		<key>hello.sass</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>24</integer>
-				<key>line</key>
-				<integer>10</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
-		<key>hello.scss</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>3</integer>
-				<key>line</key>
-				<integer>13</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
+			<integer>20</integer>
 		</dict>
 	</dict>
 	<key>openDocuments</key>
 	<array>
-		<string>autohaml.rb</string>
-		<string>hello.scss</string>
-		<string>hello.sass</string>
-		<string>hello.haml</string>
-		<string>hello.html</string>
-		<string>hello.css</string>
+		<string>lib/autohaml.rb</string>
+		<string>features/autohaml.feature</string>
+		<string>features/step_definitions/autohaml_steps.rb</string>
 	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>
