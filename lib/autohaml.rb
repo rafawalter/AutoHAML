@@ -38,6 +38,9 @@ class AutoHaml
     arquivos_processados = 0
     total_de_arquivos = 0
     Dir.glob(File.join(@pasta_base,'**','*')) do |path|
+	  next if path =~ /\.\/lib\//
+	  next if path =~ /\.\/images\//
+	  
       debug path
       if @extensoes.include?(File.extname(path))
         ultima_alteracao = File.mtime path
