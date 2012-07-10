@@ -1,10 +1,12 @@
 require 'find'
+require 'fileutils'
+
 
 class AutoHaml
   IDLE_SECONDS = 1
   SLEEP_SECONDS = 1
   
-  def initialize(pasta_base = '.', pasta_destino = '.', log = true, debug = false)
+  def initialize(pasta_base = '.', pasta_destino = File.join('.', 'public'), log = true, debug = false)
     @processamentos = {
       :haml => :montar_comando_haml,
       :sass => :montar_comando_sass,
@@ -35,6 +37,7 @@ class AutoHaml
   end
   
   def verificar_arquivos
+	inicio_desta_pesquisa = Time.now
     arquivos_processados = 0
     total_de_arquivos = 0
     Dir.glob(File.join(@pasta_base,'**','*')) do |path|
@@ -43,17 +46,19 @@ class AutoHaml
 	  
       debug path
       if @extensoes.include?(File.extname(path))
-        ultima_alteracao = File.mtime path
-        debug "#{ultima_alteracao} - #{@ultima_pesquisa} = #{ultima_alteracao.to_f - @ultima_pesquisa.to_f}"
-        if (ultima_alteracao.to_f - @ultima_pesquisa.to_f) >= -IDLE_SECONDS
-          comando = montar_comando path
-          executar comando
-          arquivos_processados += 1		  
-        end
+		if File.exists?(path)
+			ultima_alteracao = File.mtime path
+			debug "#{ultima_alteracao} - #{@ultima_pesquisa} = #{ultima_alteracao.to_f - @ultima_pesquisa.to_f}"
+			if (ultima_alteracao.to_f - @ultima_pesquisa.to_f) >= -IDLE_SECONDS
+			  comando = montar_comando path
+			  executar comando
+			  arquivos_processados += 1		  
+			end
+		end
       end
       total_de_arquivos += 1
     end
-    @ultima_pesquisa = Time.now
+    @ultima_pesquisa = inicio_desta_pesquisa
 	arquivos_processados
   end
   
@@ -70,13 +75,19 @@ class AutoHaml
   end
   
   def montar_comando_haml(path)
-    arquivo_html = path.gsub(@pasta_base, @pasta_destino).gsub('.haml', '.html')
-    "haml #{path} #{arquivo_html}"
+    arquivo_destino = path.sub(@pasta_base, @pasta_destino).sub('.haml', '')
+	garantir_que_pasta_existe arquivo_destino
+    "haml #{path} #{arquivo_destino}"
   end
   
   def montar_comando_sass(path)
-    arquivo_html = path.gsub(@pasta_base, @pasta_destino).gsub(/\.s[ac]ss/, '.css')
-    "sass #{path} #{arquivo_html}"
+    arquivo_destino = path.sub(@pasta_base, @pasta_destino).sub(/\.s[ac]ss/, '')
+    "sass #{path} #{arquivo_destino}"
+  end
+  
+  def garantir_que_pasta_existe(path)
+	pasta = File.dirname(path)
+	FileUtils.mkpath( pasta ) unless File.exists?( pasta )
   end
   
   def log(texto)
