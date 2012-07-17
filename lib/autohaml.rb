@@ -8,9 +8,13 @@ class AutoHaml
   
   def initialize(pasta_base = '.', pasta_destino = File.join('.', 'public'), log = true, debug = false)
     @processamentos = {
-      :haml => :montar_comando_haml,
-      :sass => :montar_comando_sass,
-      :scss => :montar_comando_sass
+      :haml => :processar_haml,
+      :sass => :processar_sass,
+      :scss => :processar_sass,
+	  :jpg => :copiar_arquivo,
+	  :png => :copiar_arquivo,
+	  :gif => :copiar_arquivo,
+	  :js => :copiar_arquivo,
     }
     @extensoes = @processamentos.keys.collect {|key| '.'+key.to_s}
     @pasta_base = pasta_base
@@ -42,7 +46,7 @@ class AutoHaml
     total_de_arquivos = 0
     Dir.glob(File.join(@pasta_base,'**','*')) do |path|
 	  next if path =~ /\.\/lib\//
-	  next if path =~ /\.\/images\//
+	  #next if path =~ /\.\/images\//
 	  
       debug path
       if @extensoes.include?(File.extname(path))
@@ -74,15 +78,20 @@ class AutoHaml
     send(comando, path)
   end
   
-  def montar_comando_haml(path)
+  def processar_haml(path)
     arquivo_destino = path.sub(@pasta_base, @pasta_destino).sub('.haml', '')
 	garantir_que_pasta_existe arquivo_destino
     "haml #{path} #{arquivo_destino}"
   end
   
-  def montar_comando_sass(path)
+  def processar_sass(path)
     arquivo_destino = path.sub(@pasta_base, @pasta_destino).sub(/\.s[ac]ss/, '')
     "sass #{path} #{arquivo_destino}"
+  end
+  
+  def copiar_arquivo(path)
+	arquivo_destino = path.sub(@pasta_base, @pasta_destino)
+	"xcopy #{path} #{arquivo_destino}".gsub(/\//,"\\")
   end
   
   def garantir_que_pasta_existe(path)
