@@ -15,6 +15,8 @@ class AutoHaml
 	  :png => :copiar_arquivo,
 	  :gif => :copiar_arquivo,
 	  :js => :copiar_arquivo,
+	  :csv => :copiar_arquivo,
+	  :json => :copiar_arquivo,
     }
     @extensoes = @processamentos.keys.collect {|key| '.'+key.to_s}
     @pasta_base = pasta_base
@@ -45,8 +47,7 @@ class AutoHaml
     arquivos_processados = 0
     total_de_arquivos = 0
     Dir.glob(File.join(@pasta_base,'**','*')) do |path|
-	  next if path =~ /\.\/lib\//
-	  #next if path =~ /\.\/images\//
+	  next if (path =~ /\.\/lib\// || path =~ Regexp.new(@pasta_destino) || path =~ /\.\/spec\//)
 	  
       debug path
       if @extensoes.include?(File.extname(path))
@@ -91,7 +92,7 @@ class AutoHaml
   
   def copiar_arquivo(path)
 	arquivo_destino = path.sub(@pasta_base, @pasta_destino)
-	"xcopy #{path} #{arquivo_destino}".gsub(/\//,"\\")
+	"copy #{path} #{arquivo_destino}".gsub(/\//,"\\")
   end
   
   def garantir_que_pasta_existe(path)
