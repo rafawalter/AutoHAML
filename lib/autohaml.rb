@@ -11,6 +11,7 @@ class AutoHaml
       :haml => :processar_haml,
       :sass => :processar_sass,
       :scss => :processar_sass,
+	  :less => :copiar_arquivo,
 	  :jpg => :copiar_arquivo,
 	  :png => :copiar_arquivo,
 	  :gif => :copiar_arquivo,
