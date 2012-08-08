@@ -7,19 +7,16 @@ class AutoHaml
   SLEEP_SECONDS = 1
   
   def initialize(pasta_base = '.', pasta_destino = File.join('.', 'public'), log = true, debug = false)
-    @processamentos = {
+    @comandos = {
       :haml => :processar_haml,
-      :sass => :processar_sass,
-      :scss => :processar_sass,
+      [:sass, :scss] => :processar_sass,
 	  :less => :copiar_arquivo,
-	  :jpg => :copiar_arquivo,
-	  :png => :copiar_arquivo,
-	  :gif => :copiar_arquivo,
-	  :js => :copiar_arquivo,
+	  [:jpg,:png,:gif] => :copiar_arquivo,
+	  [:js,:json] => :copiar_arquivo,
 	  :csv => :copiar_arquivo,
-	  :json => :copiar_arquivo,
     }
-    @extensoes = @processamentos.keys.collect {|key| '.'+key.to_s}
+	@comando_por_extensao = expandir_comandos(@comandos)
+    @extensoes = obter_extensoes(@comandos)
     @pasta_base = pasta_base
     @pasta_destino = pasta_destino    
     @ultima_pesquisa ||= Time.now	
@@ -28,6 +25,33 @@ class AutoHaml
 	
 	log "Monitorando a pasta #{@pasta_base}"
 	log "Gerando na pasta #{@pasta_destino}"
+	log @comando_por_extensao
+	log @extensoes
+  end
+  
+  def expandir_comandos(hash)
+	comandos_expandidos = {}
+	hash.each { |key,comando|
+		if (key.is_a? Array)
+			key.each {|subkey| comandos_expandidos[subkey] = comando }
+		else 
+			comandos_expandidos[key] = comando
+		end
+	}
+	
+	comandos_expandidos
+  end
+  
+  def obter_extensoes(hash)
+	hash.keys.collect { |key| 
+		if (key.is_a? Array)
+			extensoes = key.collect {|subkey| '.' + subkey.to_s }
+		else 
+			extensoes = '.'+key.to_s
+		end
+		
+		extensoes
+	}.flatten
   end
 
   def monitorar
@@ -75,7 +99,7 @@ class AutoHaml
   
   def montar_comando(path)
     extensao = File.extname(path).gsub('.','').to_sym
-    comando = @processamentos[extensao]
+    comando = @comando_por_extensao[extensao]
     raise "Comando desconhecido para o arquivo [#{path}]" if comando.nil?
     send(comando, path)
   end
